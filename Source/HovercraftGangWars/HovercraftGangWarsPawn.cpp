@@ -109,8 +109,6 @@ void AHovercraftGangWarsPawn::Tick(const float DeltaSeconds)
 	}
 	
 	// Create fire direction vector
-	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
-	const float FireRightValue = GetInputAxisValue(FireRightBinding);
 	const FVector FireDirection = FVector(LookDirection.X, LookDirection.Y, 0.f);
 
 	// Try and fire a shot
@@ -130,7 +128,7 @@ void AHovercraftGangWarsPawn::FireShot(const FVector FireDirection)
 			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
 
 			UWorld* const World = GetWorld();
-			if (World != NULL)
+			if (World)
 			{
 				// spawn the projectile
 				const auto Projectile = World->SpawnActor<AHovercraftGangWarsProjectile>(SpawnLocation, FireRotation);

@@ -3,6 +3,7 @@
 #include "Public/Enemy.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
+#include "TimerManager.h"
 
 
 AEnemy::AEnemy()
@@ -18,6 +19,7 @@ AEnemy::AEnemy()
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("MaterialInstanceConstant'/Game/TwinStick/Meshes/OrangeMaterial.OrangeMaterial'")));
+	HitMaterial = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("Material'/Game/TwinStick/Meshes/BaseMaterial.BaseMaterial'")));
 	StaticMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'")));
 
 	if (StaticMesh)
@@ -58,3 +60,21 @@ float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEve
 
 	return DamageAmount;
 }
+
+void AEnemy::ApplyHitMaterial()
+{
+	StaticMeshComponent->SetMaterial(0, HitMaterial);
+}
+
+void AEnemy::ResetMaterialAfter(const float Seconds)
+{
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemy::ApplyDefaultMaterial, 1.0f, false, Seconds);
+}
+
+void AEnemy::ApplyDefaultMaterial()
+{
+	StaticMeshComponent->SetMaterial(0, Material);
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}
+
