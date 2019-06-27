@@ -4,6 +4,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 
 AEnemy::AEnemy()
@@ -34,17 +36,33 @@ AEnemy::AEnemy()
 	StaticMeshComponent->SetMassOverrideInKg(NAME_None, 200.0f);
 	StaticMeshComponent->SetCollisionProfileName(FName("PhysicsActor"));
 
+	// Movement component
+	PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(FName("Movement Component"));
+	PawnMovementComponent->UpdatedComponent = RootComponent;
+
 	bCanBeDamaged = true;
+}
+
+void AEnemy::SetSpeed(const float InSpeed)
+{
+	Speed = InSpeed;
 }
 
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 }
 
 void AEnemy::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector Direction = Player->GetActorLocation() - GetActorLocation();
+	Direction.Normalize();
+
+	AddMovementInput(Direction);
 }
 
 float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -77,4 +95,3 @@ void AEnemy::ApplyDefaultMaterial()
 
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 }
-

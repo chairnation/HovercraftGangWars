@@ -61,6 +61,10 @@ void AEnemySpawner::SpawnEnemy()
 		return FVector(X, Y, GetActorLocation().Z);
 	};
 
-	GetWorld()->SpawnActor<AActor>(EnemyType, GetRandomPointOnCircle(GetActorLocation(), SpawnRadius) + SpawnOffset, GetActorRotation());
+	auto Enemy = GetWorld()->SpawnActor<AEnemy>(EnemyType, GetRandomPointOnCircle(GetActorLocation(), SpawnRadius) + SpawnOffset, GetActorRotation());
+
+	if (Enemy)
+		Enemy->SetSpeed(EnemySpeed);
+
 	EnemyCount++;
 }
