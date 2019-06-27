@@ -26,6 +26,11 @@ AEnemy::AEnemy()
 
 	StaticMeshComponent->SetRelativeLocation(FVector(0.0f));
 	StaticMeshComponent->SetWorldScale3D(FVector(0.5f, 0.5f, 1.0f));
+	StaticMeshComponent->SetSimulatePhysics(true);
+	StaticMeshComponent->SetMassOverrideInKg(NAME_None, 200.0f);
+	StaticMeshComponent->SetCollisionProfileName(FName("PhysicsActor"));
+
+	bCanBeDamaged = true;
 }
 
 void AEnemy::BeginPlay()

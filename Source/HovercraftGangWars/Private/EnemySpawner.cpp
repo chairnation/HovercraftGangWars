@@ -53,7 +53,7 @@ void AEnemySpawner::SpawnEnemy()
 	// Lambda function, to generate a random point on sphere (this is used for spawning boids on the generated point)
 	const auto GetRandomPointOnCircle = [&](const FVector Center, const float Radius)
 	{
-		const float Angle = FMath::FRandRange(0.0f, PI);
+		const float Angle = FMath::FRandRange(0.0f, 2*PI);
 
 		const float X = Center.X + Radius * FMath::Cos(Angle);
 		const float Y = Center.Y + Radius * FMath::Sin(Angle);

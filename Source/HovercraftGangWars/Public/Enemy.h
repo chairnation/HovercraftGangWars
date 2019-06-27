@@ -19,11 +19,14 @@ protected:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditDefaultsOnly)
 		USceneComponent* SceneComponent;
 
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditDefaultsOnly)
 		UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditInstanceOnly, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
+		int32 Health = 100;
 
 	UStaticMesh* StaticMesh;
 };
