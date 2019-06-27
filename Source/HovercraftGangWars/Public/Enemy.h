@@ -18,7 +18,7 @@ public:
 
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	void ApplyHitMaterial();
+	void ApplyHitMaterial() const;
 	void ResetMaterialAfter(float Seconds);
 
 protected:
