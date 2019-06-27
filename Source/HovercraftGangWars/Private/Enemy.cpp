@@ -79,7 +79,7 @@ float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEve
 	return DamageAmount;
 }
 
-void AEnemy::ApplyHitMaterial()
+void AEnemy::ApplyHitMaterial() const
 {
 	StaticMeshComponent->SetMaterial(0, HitMaterial);
 }
