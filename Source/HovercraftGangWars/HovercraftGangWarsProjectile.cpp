@@ -7,6 +7,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Public/Enemy.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 AHovercraftGangWarsProjectile::AHovercraftGangWarsProjectile() 
 {
@@ -37,14 +39,17 @@ AHovercraftGangWarsProjectile::AHovercraftGangWarsProjectile()
 void AHovercraftGangWarsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
 
 		if (OtherActor->IsA(AEnemy::StaticClass()))
 		{
 			const FDamageEvent DamageEvent;
-			Cast<AEnemy>(OtherActor)->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
+			AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+			Enemy->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
+			Enemy->ApplyHitMaterial();
+			Enemy->ResetMaterialAfter(0.05f);
 		}
 	}
 

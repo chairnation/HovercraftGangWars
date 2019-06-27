@@ -16,10 +16,15 @@ public:
 
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void ApplyHitMaterial();
+	void ResetMaterialAfter(float Seconds);
+
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
+
+	void ApplyDefaultMaterial();
 
 	UPROPERTY(EditDefaultsOnly)
 		USceneComponent* SceneComponent;
@@ -32,4 +37,7 @@ protected:
 
 	UStaticMesh* StaticMesh;
 	UMaterialInterface* Material;
+	UMaterialInterface* HitMaterial;
+
+	FTimerHandle TimerHandle;
 };

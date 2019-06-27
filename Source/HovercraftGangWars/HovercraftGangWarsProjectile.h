@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TimerManager.h"
 #include "HovercraftGangWarsProjectile.generated.h"
 
 class UProjectileMovementComponent;
