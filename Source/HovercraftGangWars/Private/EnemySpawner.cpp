@@ -6,10 +6,11 @@
 #include "Components/BillboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Texture2D.h"
+#include "DrawDebugHelpers.h"
 
 AEnemySpawner::AEnemySpawner()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// Scene Component
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(FName("Scene Component"));
@@ -30,11 +31,23 @@ void AEnemySpawner::BeginPlay()
 	StartSpawner();
 }
 
+void AEnemySpawner::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	DrawDebugCircle(GetWorld(), GetActorLocation(), SpawnRadius, 80, FColor::Red, false, -1, 0, 1, FVector::ForwardVector, FVector::RightVector);
+}
+
 void AEnemySpawner::PostEditMove(const bool bFinished)
 {
 	Super::PostEditMove(bFinished);
 
 	BillboardComponent->SetRelativeLocation(FVector(0.0f));
+}
+
+bool AEnemySpawner::ShouldTickIfViewportsOnly() const
+{
+	return true;
 }
 
 void AEnemySpawner::StartSpawner()
@@ -44,6 +57,17 @@ void AEnemySpawner::StartSpawner()
 
 void AEnemySpawner::SpawnEnemy()
 {
-	GetWorld()->SpawnActor<AActor>(EnemyType, GetActorLocation(), GetActorRotation());
+	// Lambda function, to generate a random point on sphere (this is used for spawning boids on the generated point)
+	const auto GetRandomPointOnCircle = [&](const FVector Center, const float Radius)
+	{
+		const float Angle = FMath::FRandRange(0.0f, PI);
+
+		const float X = Center.X + Radius * FMath::Cos(Angle);
+		const float Y = Center.Y + Radius * FMath::Sin(Angle);
+
+		return FVector(X, Y, GetActorLocation().Z);
+	};
+
+	GetWorld()->SpawnActor<AActor>(EnemyType, GetRandomPointOnCircle(GetActorLocation(), SpawnRadius) + SpawnOffset, GetActorRotation());
 	EnemyCount++;
 }

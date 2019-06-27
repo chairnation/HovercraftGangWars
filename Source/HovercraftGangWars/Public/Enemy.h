@@ -1,12 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ChairNation, 2019
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
-UCLASS()
+UCLASS(HideCategories = ("Rendering", "Input", "Actor", "LOD", "Cooking"))
 class HOVERCRAFTGANGWARS_API AEnemy : public AActor
 {
 	GENERATED_BODY()
@@ -17,12 +16,15 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
+	void PostEditMove(bool bFinished) override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditInstanceOnly)
+		USceneComponent* SceneComponent;
 
-	
-	
+	UPROPERTY(EditInstanceOnly)
+		UStaticMeshComponent* StaticMeshComponent;
+
+	UStaticMesh* StaticMesh;
 };
