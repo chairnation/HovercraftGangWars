@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{3DD44291-4A85-15C1-DE6B-54A76348F253}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "HovercraftGangWars",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
