@@ -31,4 +31,5 @@ protected:
 		int32 Health = 100;
 
 	UStaticMesh* StaticMesh;
+	UMaterialInterface* Material;
 };
