@@ -14,7 +14,7 @@ AEnemySpawner::AEnemySpawner()
 
 	// Scene Component
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(FName("Scene Component"));
-	SceneComponent = RootComponent;
+	RootComponent = SceneComponent;
 
 	// Billboard Component
 	BillboardComponent = CreateDefaultSubobject<UBillboardComponent>(FName("Billboard Component"));
@@ -36,13 +36,6 @@ void AEnemySpawner::Tick(const float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	DrawDebugCircle(GetWorld(), GetActorLocation(), SpawnRadius, 80, FColor::Red, false, -1, 0, 1, FVector::ForwardVector, FVector::RightVector);
-}
-
-void AEnemySpawner::PostEditMove(const bool bFinished)
-{
-	Super::PostEditMove(bFinished);
-
-	BillboardComponent->SetRelativeLocation(FVector(0.0f));
 }
 
 bool AEnemySpawner::ShouldTickIfViewportsOnly() const

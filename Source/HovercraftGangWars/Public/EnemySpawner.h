@@ -17,7 +17,6 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
-	void PostEditMove(bool bFinished) override;
 	bool ShouldTickIfViewportsOnly() const override;
 
 	void StartSpawner();

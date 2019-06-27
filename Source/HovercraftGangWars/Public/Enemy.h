@@ -18,7 +18,6 @@ protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
-	void PostEditMove(bool bFinished) override;
 
 	UPROPERTY(EditInstanceOnly)
 		USceneComponent* SceneComponent;
