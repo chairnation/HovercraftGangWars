@@ -96,7 +96,7 @@ void AHovercraftGangWarsPawn::Tick(float DeltaSeconds)
 	const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
 
 	// Try and fire a shot
-	FireShot(FireDirection);
+	FireShot(MoveDirection);
 }
 
 void AHovercraftGangWarsPawn::FireShot(FVector FireDirection)
