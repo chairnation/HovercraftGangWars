@@ -42,7 +42,10 @@ protected:
 	UPROPERTY(EditInstanceOnly)
 		FVector SpawnOffset;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditInstanceOnly)
+		int32 EnemySpeed = 100;
+
+	UPROPERTY(VisibleAnywhere, Category = "Debug")
 		int32 EnemyCount;
 
 private:
