@@ -28,7 +28,7 @@ protected:
 		USceneComponent* SceneComponent;
 
 	UPROPERTY()
-		UBillboardComponent* BillboardComponent;
+		class UBillboardComponent* BillboardComponent;
 
 	UPROPERTY(EditInstanceOnly)
 		TSubclassOf<AEnemy> EnemyType;
