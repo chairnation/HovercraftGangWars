@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ChairNation, 2019
 
 #pragma once
 
@@ -16,7 +16,9 @@ public:
 
 protected:
 	void BeginPlay() override;
+	void Tick(float DeltaSeconds) override;
 	void PostEditMove(bool bFinished) override;
+	bool ShouldTickIfViewportsOnly() const override;
 
 	void StartSpawner();
 
@@ -33,7 +35,13 @@ protected:
 		TSubclassOf<AEnemy> EnemyType;
 
 	UPROPERTY(EditInstanceOnly)
+		float SpawnRadius = 100.0f;
+
+	UPROPERTY(EditInstanceOnly)
 		float SpawnDelay = 1.0f;
+
+	UPROPERTY(EditInstanceOnly)
+		FVector SpawnOffset;
 
 	UPROPERTY(VisibleAnywhere)
 		int32 EnemyCount;
