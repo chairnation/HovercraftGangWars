@@ -17,11 +17,13 @@ AEnemy::AEnemy()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
+	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("MaterialInstanceConstant'/Game/TwinStick/Meshes/OrangeMaterial.OrangeMaterial'")));
 	StaticMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'")));
 
 	if (StaticMesh)
 	{
 		StaticMeshComponent->SetStaticMesh(StaticMesh);
+		StaticMeshComponent->SetMaterial(0, Material);
 	}
 
 	StaticMeshComponent->SetRelativeLocation(FVector(0.0f));
@@ -43,8 +45,7 @@ void AEnemy::Tick(const float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
+float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 

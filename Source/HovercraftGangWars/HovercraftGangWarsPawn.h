@@ -46,6 +46,7 @@ public:
 	class USoundBase* FireSound;
 
 	// Begin Actor Interface
+	void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End Actor Interface
@@ -61,6 +62,7 @@ public:
 	static const FName MoveRightBinding;
 	static const FName FireForwardBinding;
 	static const FName FireRightBinding;
+	static const FName FireActionBinding;
 
 private:
 
@@ -69,6 +71,8 @@ private:
 
 	/** Handle for efficient management of ShotTimerExpired timer */
 	FTimerHandle TimerHandle_ShotTimerExpired;
+
+	APlayerController* PlayerController;
 
 public:
 	/** Returns ShipMeshComponent subobject **/

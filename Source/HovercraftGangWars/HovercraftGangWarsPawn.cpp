@@ -24,6 +24,7 @@ AHovercraftGangWarsPawn::AHovercraftGangWarsPawn()
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
 	RootComponent = ShipMeshComponent;
+	ShipMeshComponent->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
 	
@@ -63,7 +64,15 @@ void AHovercraftGangWarsPawn::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAxis(FireRightBinding);
 }
 
-void AHovercraftGangWarsPawn::Tick(float DeltaSeconds)
+void AHovercraftGangWarsPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->bShowMouseCursor = true;
+}
+
+void AHovercraftGangWarsPawn::Tick(const float DeltaSeconds)
 {
 	// Find movement direction
 	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
@@ -72,13 +81,22 @@ void AHovercraftGangWarsPawn::Tick(float DeltaSeconds)
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
 	const FVector MoveDirection = FVector(ForwardValue, RightValue, 0.f).GetClampedToMaxSize(1.0f);
 
+	// Calculate look direction
+	FVector WorldLocation;
+	FVector WorldDirection;
+	PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
+
+	const FVector LookDirection = WorldDirection * FVector(1.0f, 1.0f, 0.0f);
+
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
+
+	const FRotator NewRotation = LookDirection.Rotation() + FRotator(0.0f, -90.0f, 0.0f);
+	SetActorRotation(NewRotation);
 
 	// If non-zero size, move this actor
 	if (Movement.SizeSquared() > 0.0f)
 	{
-		const FRotator NewRotation = Movement.Rotation();
 		FHitResult Hit(1.f);
 		RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
 		
@@ -93,16 +111,16 @@ void AHovercraftGangWarsPawn::Tick(float DeltaSeconds)
 	// Create fire direction vector
 	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	const float FireRightValue = GetInputAxisValue(FireRightBinding);
-	const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
+	const FVector FireDirection = FVector(LookDirection.X, LookDirection.Y, 0.f);
 
 	// Try and fire a shot
-	FireShot(MoveDirection);
+	FireShot(FireDirection);
 }
 
-void AHovercraftGangWarsPawn::FireShot(FVector FireDirection)
+void AHovercraftGangWarsPawn::FireShot(const FVector FireDirection)
 {
 	// If it's ok to fire again
-	if (bCanFire == true)
+	if (bCanFire && PlayerController->IsInputKeyDown(EKeys::LeftMouseButton) || PlayerController->IsInputKeyDown(EKeys::Gamepad_RightTrigger))
 	{
 		// If we are pressing fire stick in a direction
 		if (FireDirection.SizeSquared() > 0.0f)
