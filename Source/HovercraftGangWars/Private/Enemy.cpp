@@ -42,3 +42,18 @@ void AEnemy::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	Health -= DamageAmount;
+
+	if (Health <= 0)
+	{
+		Destroy();
+	}
+
+	return DamageAmount;
+}

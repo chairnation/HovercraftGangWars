@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Engine/StaticMesh.h"
+#include "Public/Enemy.h"
 
 AHovercraftGangWarsProjectile::AHovercraftGangWarsProjectile() 
 {
@@ -39,6 +40,12 @@ void AHovercraftGangWarsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* 
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
+
+		if (OtherActor->IsA(AEnemy::StaticClass()))
+		{
+			const FDamageEvent DamageEvent;
+			Cast<AEnemy>(OtherActor)->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
+		}
 	}
 
 	Destroy();

@@ -115,7 +115,8 @@ void AHovercraftGangWarsPawn::FireShot(FVector FireDirection)
 			if (World != NULL)
 			{
 				// spawn the projectile
-				World->SpawnActor<AHovercraftGangWarsProjectile>(SpawnLocation, FireRotation);
+				const auto Projectile = World->SpawnActor<AHovercraftGangWarsProjectile>(SpawnLocation, FireRotation);
+				Projectile->Damage = DamagePerShot;
 			}
 
 			bCanFire = false;

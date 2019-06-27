@@ -14,6 +14,8 @@ public:
 	// Sets default values for this actor's properties
 	AEnemy();
 
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;

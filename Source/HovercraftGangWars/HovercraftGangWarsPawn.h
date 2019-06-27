@@ -38,6 +38,9 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	int32 DamagePerShot;
+
 	/** Sound to play each time we fire */
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* FireSound;
