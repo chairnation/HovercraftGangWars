@@ -50,6 +50,11 @@ void AEnemy::SetFirerate(float InFirerate)
 	FireRate = InFirerate;
 }
 
+void AEnemy::SetDamage(int32 InDamage)
+{
+	DamagePerShot = InDamage;
+}
+
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();

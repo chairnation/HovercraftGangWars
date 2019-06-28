@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Public/Enemy.h"
+#include "DestructibleActor.h"
 #include "EnemySpawner.generated.h"
 
 UCLASS(HideCategories=("Rendering", "Input", "Actor", "LOD", "Cooking"))
@@ -14,7 +15,8 @@ class HOVERCRAFTGANGWARS_API AEnemySpawner final : public AActor
 public:	
 	AEnemySpawner();
 
-	void StopSpawning();
+	UFUNCTION()
+		void StopSpawning(const FVector& HitPoint, const FVector& HitDirection);
 
 protected:
 	void BeginPlay() override;
@@ -31,6 +33,9 @@ protected:
 
 	UPROPERTY()
 		class UBillboardComponent* BillboardComponent;
+
+	UPROPERTY(EditInstanceOnly)
+		ADestructibleActor* DestructibleActor;
 
 	UPROPERTY(EditInstanceOnly)
 		TSubclassOf<AEnemy> EnemyType;
@@ -52,6 +57,9 @@ protected:
 
 	UPROPERTY(EditInstanceOnly)
 		int32 EnemyBulletSpeed = 100;
+
+	UPROPERTY(EditInstanceOnly)
+		int32 EnemyBulletDamage = 10;
 
 	UPROPERTY(VisibleAnywhere, Category = "Debug")
 		int32 EnemyCount;

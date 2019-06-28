@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Texture2D.h"
 #include "DrawDebugHelpers.h"
+#include "DestructibleComponent.h"
 
 AEnemySpawner::AEnemySpawner()
 {
@@ -24,7 +25,7 @@ AEnemySpawner::AEnemySpawner()
 	BillboardComponent->SetRelativeLocation(FVector(0.0f));
 }
 
-void AEnemySpawner::StopSpawning()
+void AEnemySpawner::StopSpawning(const FVector& HitPoint, const FVector& HitDirection)
 {
 	GetWorld()->GetTimerManager().ClearTimer(Timer);
 }
@@ -34,6 +35,9 @@ void AEnemySpawner::BeginPlay()
 	Super::BeginPlay();
 
 	StartSpawner();
+
+	if (DestructibleActor)
+		DestructibleActor->GetDestructibleComponent()->OnComponentFracture.AddDynamic(this, &AEnemySpawner::StopSpawning);
 }
 
 void AEnemySpawner::Tick(const float DeltaSeconds)

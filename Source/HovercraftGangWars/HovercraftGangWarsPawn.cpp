@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "PlayerBullet.h"
+#include "Engine/Engine.h"
 
 const FName AHovercraftGangWarsPawn::MoveForwardBinding("MoveForward");
 const FName AHovercraftGangWarsPawn::MoveRightBinding("MoveRight");
@@ -55,6 +56,20 @@ AHovercraftGangWarsPawn::AHovercraftGangWarsPawn()
 	bCanFire = true;
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+}
+
+void AHovercraftGangWarsPawn::ApplyDamage(const int32 Damage)
+{
+	Health -= Damage;
+
+	if (Health <= 0)
+	{
+		Health = 0;
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString("Dead!"), true, FVector2D(2.0f, 2.0f));
+
+		MoveSpeed = 0;
+	}
 }
 
 void AHovercraftGangWarsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

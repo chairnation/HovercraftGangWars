@@ -17,6 +17,7 @@ public:
 	void SetSpeed(float InSpeed);
 	void SetBulletSpeed(int32 InSpeed);
 	void SetFirerate(float InFirerate);
+	void SetDamage(int32 InDamage);
 
 	float ApplyDamage(int32 DamageAmount);
 

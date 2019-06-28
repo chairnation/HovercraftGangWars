@@ -4,6 +4,7 @@
 #include "Materials/MaterialInterface.h"
 #include "Components/StaticMeshComponent.h"
 #include "PlayerBullet.h"
+#include "HovercraftGangWarsPawn.h"
 
 
 AEnemyBullet::AEnemyBullet()
@@ -17,6 +18,11 @@ void AEnemyBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrim
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
+		if (OtherActor->IsA(AHovercraftGangWarsPawn::StaticClass()))
+		{
+			Cast<AHovercraftGangWarsPawn>(OtherActor)->ApplyDamage(Damage);
+		}
+
 		Destroy();
 	}
 }

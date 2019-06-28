@@ -26,6 +26,8 @@ class AHovercraftGangWarsPawn : public APawn
 public:
 	AHovercraftGangWarsPawn();
 
+	void ApplyDamage(int32 Damage);
+
 	/** Offset from the ships location to spawn projectiles */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite )
 	FVector GunOffset;
@@ -43,6 +45,9 @@ public:
 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	int32 DamagePerShot;
+
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	int32 Health = 100;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
