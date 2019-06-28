@@ -74,8 +74,6 @@ void AEnemy::Tick(const float DeltaTime)
 			StaticMeshComponent->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
 		}
 	}
-
-	FireShot()
 }
 
 float AEnemy::ApplyDamage(const int32 DamageAmount)
