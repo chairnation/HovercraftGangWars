@@ -24,6 +24,11 @@ AEnemySpawner::AEnemySpawner()
 	BillboardComponent->SetRelativeLocation(FVector(0.0f));
 }
 
+void AEnemySpawner::StopSpawning()
+{
+	GetWorld()->GetTimerManager().ClearTimer(Timer);
+}
+
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
