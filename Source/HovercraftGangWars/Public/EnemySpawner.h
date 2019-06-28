@@ -14,6 +14,8 @@ class HOVERCRAFTGANGWARS_API AEnemySpawner final : public AActor
 public:	
 	AEnemySpawner();
 
+	void StopSpawning();
+
 protected:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;

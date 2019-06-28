@@ -1,0 +1,13 @@
+// Copyright ChairNation, 2019
+
+#include "EnemyBullet.h"
+#include "Materials/MaterialInterface.h"
+#include "Components/StaticMeshComponent.h"
+
+
+AEnemyBullet::AEnemyBullet()
+{
+	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("MaterialInstanceConstant'/Game/TwinStickCPP/EdsFolder/m_EnemyBullet.m_EnemyBullet'")));
+
+	ProjectileMeshComponent->SetMaterial(0, Material);
+}

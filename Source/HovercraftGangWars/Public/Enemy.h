@@ -28,6 +28,8 @@ protected:
 
 	void ApplyDefaultMaterial();
 
+	void FireShot(FVector FireDirection);
+
 	AActor* Player;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -50,4 +52,6 @@ protected:
 	UMaterialInterface* HitMaterial;
 
 	FTimerHandle TimerHandle;
+
+	bool bCanFire;
 };

@@ -15,7 +15,7 @@ AEnemy::AEnemy()
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetCollisionProfileName(FName("Pawn"));
 
-	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("MaterialInstanceConstant'/Game/TwinStick/Meshes/OrangeMaterial.OrangeMaterial'")));
+	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("Material'/Game/TwinStickCPP/BradsFolder/Material/M_Gangster_body.M_Gangster_body'")));
 	HitMaterial = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("Material'/Game/TwinStick/Meshes/BaseMaterial.BaseMaterial'")));
 	StaticMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("StaticMesh'/Game/TwinStickCPP/BradsFolder/Gangster.Gangster'")));
 
@@ -30,6 +30,7 @@ AEnemy::AEnemy()
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	bCanBeDamaged = true;
+	bCanFire = true;
 }
 
 void AEnemy::SetSpeed(const float InSpeed)
