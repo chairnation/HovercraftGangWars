@@ -12,6 +12,7 @@
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+#include "PlayerBullet.h"
 
 const FName AHovercraftGangWarsPawn::MoveForwardBinding("MoveForward");
 const FName AHovercraftGangWarsPawn::MoveRightBinding("MoveRight");
@@ -131,7 +132,7 @@ void AHovercraftGangWarsPawn::FireShot(const FVector FireDirection)
 			if (World)
 			{
 				// spawn the projectile
-				const auto Projectile = World->SpawnActor<AHovercraftGangWarsProjectile>(SpawnLocation, FireRotation);
+				const auto Projectile = World->SpawnActor<APlayerBullet>(SpawnLocation, FireRotation);
 				Projectile->Damage = DamagePerShot;
 			}
 
