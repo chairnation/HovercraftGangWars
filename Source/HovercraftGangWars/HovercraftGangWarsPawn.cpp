@@ -53,6 +53,8 @@ AHovercraftGangWarsPawn::AHovercraftGangWarsPawn()
 	BulletSpeed = 2000.0f;
 	FireRate = 0.1f;
 	bCanFire = true;
+
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 void AHovercraftGangWarsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
