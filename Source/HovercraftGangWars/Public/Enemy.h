@@ -16,7 +16,7 @@ public:
 
 	void SetSpeed(float InSpeed);
 
-	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	float ApplyDamage(int32 DamageAmount);
 
 	void ApplyHitMaterial() const;
 	void ResetMaterialAfter(float Seconds);

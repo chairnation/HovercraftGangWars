@@ -20,7 +20,7 @@ const FName AHovercraftGangWarsPawn::FireRightBinding("FireRight");
 
 AHovercraftGangWarsPawn::AHovercraftGangWarsPawn()
 {	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/TwinStick/Meshes/TwinStickUFO.TwinStickUFO"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("StaticMesh'/Game/TwinStickCPP/HowardsFolder/HoverCraft/HoverCraftWhole.HoverCraftWhole'"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
 	RootComponent = ShipMeshComponent;

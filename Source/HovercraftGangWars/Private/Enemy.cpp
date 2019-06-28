@@ -5,24 +5,19 @@
 #include "Engine/StaticMesh.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "GameFramework/FloatingPawnMovement.h"
-
 
 AEnemy::AEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Scene component
-	SceneComponent = CreateDefaultSubobject<USceneComponent>(FName("Scene Component"));
-	RootComponent = SceneComponent;
-
 	// Static mesh component
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetCollisionProfileName(FName("Pawn"));
 
 	Material = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("MaterialInstanceConstant'/Game/TwinStick/Meshes/OrangeMaterial.OrangeMaterial'")));
 	HitMaterial = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, TEXT("Material'/Game/TwinStick/Meshes/BaseMaterial.BaseMaterial'")));
-	StaticMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'")));
+	StaticMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("StaticMesh'/Game/TwinStickCPP/BradsFolder/Gangster.Gangster'")));
 
 	if (StaticMesh)
 	{
@@ -31,14 +26,9 @@ AEnemy::AEnemy()
 	}
 
 	StaticMeshComponent->SetRelativeLocation(FVector(0.0f));
-	StaticMeshComponent->SetWorldScale3D(FVector(0.5f, 0.5f, 1.0f));
-	StaticMeshComponent->SetSimulatePhysics(true);
-	StaticMeshComponent->SetCollisionProfileName(FName("PhysicsActor"));
+	StaticMeshComponent->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
-	// Movement component
-	PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(FName("Movement Component"));
-	PawnMovementComponent->UpdatedComponent = RootComponent;
-
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	bCanBeDamaged = true;
 }
 
@@ -62,15 +52,34 @@ void AEnemy::Tick(const float DeltaTime)
 
 	FVector Direction = Player->GetActorLocation() - GetActorLocation();
 	Direction.Normalize();
+	
+	const FVector Movement = Direction * Speed * DeltaTime;
 
-	AddMovementInput(Direction);
+	const FRotator NewRotation = Direction.Rotation() + FRotator(0.0f, -90.0f, 0.0f);
+	SetActorRotation(NewRotation);
+
+	if (Movement.SizeSquared() > 0.0f)
+	{		
+		FHitResult Hit(1.f);
+		RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
+
+		if (Hit.bBlockingHit)
+		{
+			const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
+			const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
+			RootComponent->MoveComponent(Deflection, NewRotation, true);
+
+			StaticMeshComponent->SetSimulatePhysics(true);
+			StaticMeshComponent->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
+		}
+	}
 }
 
-float AEnemy::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float AEnemy::ApplyDamage(const int32 DamageAmount)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	Health -= DamageAmount;
+
+	StaticMeshComponent->SetSimulatePhysics(true);
 
 	if (Health <= 0)
 	{
