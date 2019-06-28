@@ -72,6 +72,8 @@ void AEnemySpawner::SpawnEnemy()
 	{
 		Enemy->SpawnDefaultController();
 		Enemy->SetSpeed(EnemySpeed);
+		Enemy->SetBulletSpeed(EnemyBulletSpeed);
+		Enemy->SetFirerate(EnemyFireRate);
 	}
 
 	EnemyCount++;

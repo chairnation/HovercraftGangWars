@@ -5,6 +5,8 @@
 #include "Engine/StaticMesh.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "HovercraftGangWarsPawn.h"
+#include "EnemyBullet.h"
 
 AEnemy::AEnemy()
 {
@@ -36,6 +38,16 @@ AEnemy::AEnemy()
 void AEnemy::SetSpeed(const float InSpeed)
 {
 	Speed = InSpeed;
+}
+
+void AEnemy::SetBulletSpeed(const int32 InSpeed)
+{
+	BulletSpeed = InSpeed;
+}
+
+void AEnemy::SetFirerate(float InFirerate)
+{
+	FireRate = InFirerate;
 }
 
 void AEnemy::BeginPlay()
@@ -70,10 +82,15 @@ void AEnemy::Tick(const float DeltaTime)
 			const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
 			RootComponent->MoveComponent(Deflection, NewRotation, true);
 
-			StaticMeshComponent->SetSimulatePhysics(true);
-			StaticMeshComponent->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
+			if (Hit.GetActor() && Hit.GetActor()->IsA(AHovercraftGangWarsPawn::StaticClass()))
+			{
+				StaticMeshComponent->SetSimulatePhysics(true);
+				StaticMeshComponent->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
+			}
 		}
 	}
+
+	FireShot(Direction);
 }
 
 float AEnemy::ApplyDamage(const int32 DamageAmount)
@@ -105,4 +122,31 @@ void AEnemy::ApplyDefaultMaterial()
 	StaticMeshComponent->SetMaterial(0, Material);
 
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}
+
+void AEnemy::FireShot(const FVector FireDirection)
+{
+	if (bCanFire)
+	{
+		const FRotator FireRotation = FireDirection.Rotation();
+		// Spawn projectile at an offset from this pawn
+		const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+
+		UWorld* const World = GetWorld();
+		if (World)
+		{
+			// spawn the projectile
+			const auto Projectile = World->SpawnActor<AEnemyBullet>(SpawnLocation, FireRotation);
+			Projectile->Damage = DamagePerShot;
+			Projectile->SetSpeed(BulletSpeed);
+		}
+
+		bCanFire = false;
+		World->GetTimerManager().SetTimer(Timer_ShotExpiry, this, &AEnemy::ShotTimerExpired, FireRate);
+	}
+}
+
+void AEnemy::ShotTimerExpired()
+{
+	bCanFire = true;
 }

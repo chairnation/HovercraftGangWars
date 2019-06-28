@@ -47,6 +47,12 @@ protected:
 	UPROPERTY(EditInstanceOnly)
 		int32 EnemySpeed = 100;
 
+	UPROPERTY(EditInstanceOnly)
+		float EnemyFireRate = 0.1f;
+
+	UPROPERTY(EditInstanceOnly)
+		int32 EnemyBulletSpeed = 100;
+
 	UPROPERTY(VisibleAnywhere, Category = "Debug")
 		int32 EnemyCount;
 
