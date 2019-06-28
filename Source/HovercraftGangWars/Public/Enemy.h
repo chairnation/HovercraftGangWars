@@ -15,6 +15,8 @@ public:
 	AEnemy();
 
 	void SetSpeed(float InSpeed);
+	void SetBulletSpeed(int32 InSpeed);
+	void SetFirerate(float InFirerate);
 
 	float ApplyDamage(int32 DamageAmount);
 
@@ -29,6 +31,8 @@ protected:
 	void ApplyDefaultMaterial();
 
 	void FireShot(FVector FireDirection);
+
+	void ShotTimerExpired();
 
 	AActor* Player;
 
@@ -47,11 +51,24 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
 		int32 Speed = 100;
 
+	UPROPERTY(VisibleAnywhere, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
+		int32 BulletSpeed = 2000;
+
+	UPROPERTY(VisibleAnywhere, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
+		int32 DamagePerShot = 10;
+
+	UPROPERTY(VisibleAnywhere, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
+		float FireRate = 0.1;
+
+	UPROPERTY(VisibleAnywhere, Category = "Enemy", meta = (ClampMin = 1, ClampMax = 10000))
+		FVector GunOffset = FVector(150.0f, 0.0f, 0.0f);
+
 	UStaticMesh* StaticMesh;
 	UMaterialInterface* Material;
 	UMaterialInterface* HitMaterial;
 
 	FTimerHandle TimerHandle;
+	FTimerHandle Timer_ShotExpiry;
 
 	bool bCanFire;
 };

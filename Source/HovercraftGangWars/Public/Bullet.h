@@ -27,6 +27,8 @@ protected:
 public:
 	ABullet();
 
+	void SetSpeed(int32 InSpeed) const;
+
 	/** Function to handle the projectile hitting something */
 	UFUNCTION()
 		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

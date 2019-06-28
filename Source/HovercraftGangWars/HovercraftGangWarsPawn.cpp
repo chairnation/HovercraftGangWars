@@ -50,6 +50,7 @@ AHovercraftGangWarsPawn::AHovercraftGangWarsPawn()
 	MoveSpeed = 1000.0f;
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
+	BulletSpeed = 2000.0f;
 	FireRate = 0.1f;
 	bCanFire = true;
 }
@@ -134,6 +135,7 @@ void AHovercraftGangWarsPawn::FireShot(const FVector FireDirection)
 				// spawn the projectile
 				const auto Projectile = World->SpawnActor<APlayerBullet>(SpawnLocation, FireRotation);
 				Projectile->Damage = DamagePerShot;
+				Projectile->SetSpeed(BulletSpeed);
 			}
 
 			bCanFire = false;

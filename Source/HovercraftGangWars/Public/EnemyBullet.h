@@ -16,4 +16,6 @@ class HOVERCRAFTGANGWARS_API AEnemyBullet : public ABullet
 public:
 	AEnemyBullet();
 	
+protected:
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 };

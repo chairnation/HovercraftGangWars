@@ -3,7 +3,6 @@
 #include "Bullet.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
-#include "Enemy.h"
 
 ABullet::ABullet()
 {
@@ -13,6 +12,7 @@ ABullet::ABullet()
 	ProjectileMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
 	RootComponent = ProjectileMeshComponent;
 	ProjectileMeshComponent->SetRelativeLocation(FVector(0.0f));
+	ProjectileMeshComponent->SetWorldScale3D(FVector(2.0f));
 	ProjectileMeshComponent->BodyInstance.SetCollisionProfileName("Projectile");
 	ProjectileMeshComponent->OnComponentHit.AddDynamic(this, &ABullet::OnHit);		// set up a notification for when this component hits something
 
@@ -31,27 +31,19 @@ ABullet::ABullet()
 	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = false;
-	ProjectileMovement->ProjectileGravityScale = 0.f; // No gravity
+	ProjectileMovement->ProjectileGravityScale = 0.0f; // No gravity
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
 }
 
-void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ABullet::SetSpeed(const int32 InSpeed) const
 {
-	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
-	{
-		if (OtherActor->IsA(AEnemy::StaticClass()))
-		{
-			AEnemy* Enemy = Cast<AEnemy>(OtherActor);
-			Enemy->ApplyDamage(Damage);
-			OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
-			Enemy->ApplyHitMaterial();
-			Enemy->ResetMaterialAfter(0.05f);
-		}
-
-		Destroy();
-	}
+	ProjectileMovement->InitialSpeed = InSpeed;
+	ProjectileMovement->MaxSpeed = InSpeed;
 }
 
+void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+
+}
