@@ -64,7 +64,10 @@ void AEnemySpawner::SpawnEnemy()
 	auto Enemy = GetWorld()->SpawnActor<AEnemy>(EnemyType, GetRandomPointOnCircle(GetActorLocation(), SpawnRadius) + SpawnOffset, GetActorRotation());
 
 	if (Enemy)
+	{
+		Enemy->SpawnDefaultController();
 		Enemy->SetSpeed(EnemySpeed);
+	}
 
 	EnemyCount++;
 }
