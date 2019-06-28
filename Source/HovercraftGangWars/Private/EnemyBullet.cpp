@@ -17,6 +17,6 @@ void AEnemyBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrim
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-			Destroy();
+		Destroy();
 	}
 }
