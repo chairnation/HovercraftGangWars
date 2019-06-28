@@ -39,15 +39,13 @@ AHovercraftGangWarsProjectile::AHovercraftGangWarsProjectile()
 void AHovercraftGangWarsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
-
 		if (OtherActor->IsA(AEnemy::StaticClass()))
 		{
-			const FDamageEvent DamageEvent;
 			AEnemy* Enemy = Cast<AEnemy>(OtherActor);
-			Enemy->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
+			Enemy->ApplyDamage(Damage);
+			OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
 			Enemy->ApplyHitMaterial();
 			Enemy->ResetMaterialAfter(0.05f);
 		}
